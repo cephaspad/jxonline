@@ -24,7 +24,7 @@ services:
   
   goddess:
     depends_on:
-      - mariadb
+      - mysql
     build:
       context: .
       dockerfile: Dockerfile
