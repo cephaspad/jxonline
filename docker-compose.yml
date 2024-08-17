@@ -1,4 +1,4 @@
-# version: "3.9"
+version: "3.9"
 
 services:
   mysql:
@@ -22,16 +22,16 @@ services:
     volumes:
       - mssql_data:/var/opt/mssql
   
-  goddess:
-    depends_on:
-      - mysql
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - server_data:/server
-    ports:
-      - 5001:5001
+  # goddess:
+  #   depends_on:
+  #     - mysql
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - server_data:/server
+  #   ports:
+  #     - 5001:5001
 
 volumes:
   mysql_data:
