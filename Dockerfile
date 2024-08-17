@@ -3,8 +3,8 @@ FROM ubuntu:24.04
 RUN dpkg --add-architecture i386
 RUN apt update
 RUN apt upgrade -y
-RUN apt install -y libuuid1:i386 libc6:i386 libstdc++6:i386 xvfb dbus-x11
-RUN apt install -y zenity
+RUN apt install -y libuuid1:i386 libc6:i386 libstdc++6:i386
+RUN apt install -y zenity xvfb dbus-x11 xterm
 ENV DISPLAY=:99
 ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 ENV XDG_RUNTIME_DIR=/tmp
