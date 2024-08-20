@@ -2,36 +2,52 @@
 
 services:
   mysql:
+    container_name: jxonline_mysql
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: 1234560123
       TZ: "Asia/Ho_Chi_Minh"
-    ports:
-      - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
+    network_mode: host
   
   mssql:
+    container_name: jxonline_mssql
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       MSSQL_SA_PASSWORD: "SAJx123456"
       ACCEPT_EULA: "Y"
       TZ: "Asia/Ho_Chi_Minh"
-    ports:
-      - 1433:1433
     volumes:
       - mssql_data:/var/opt/mssql
+    network_mode: host
   
-  # goddess:
-  #   depends_on:
-  #     - mysql
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - server_data:/server
-  #   ports:
-  #     - 5001:5001
+  web-server:
+    container_name: jxonline_web_server
+    build:
+      context: web-server
+      dockerfile: Dockerfile
+    volumes:
+      - server_data:/app
+    network_mode: host
+  
+  pay-server:
+    container_name: jxonline_pay_server
+    build:
+      context: .
+      dockerfile: pay-server/Dockerfile
+    volumes:
+      - server_data:/app
+    network_mode: host
+  
+  relay-server:
+    container_name: jxonline_relay_server
+    build:
+      context: .
+      dockerfile: relay_server/Dockerfile
+    volumes:
+      - server_data:/app
+    network_mode: host
 
 volumes:
   mysql_data:

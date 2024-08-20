@@ -1,7 +1,0 @@
-FROM ewr.vultrcr.com/jxonline/account-server:linux-8.0
-
-WORKDIR /app
-COPY paysyswin/ .
-
-
-ENTRYPOINT ["/usr/bin/wine", "Sword3PaySys.exe"]
