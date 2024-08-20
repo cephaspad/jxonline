@@ -5,7 +5,7 @@
 2. Login to Vultr Container Registry
 docker build .\account-server\ -f .\account-server\Dockerfile.base  --build-arg DISPLAY=10.10.11.22:0.0 -t ewr.vultrcr.com/jxonline/account-server:linux-8.0 --push
 docker build .\account-server\ -f .\account-server\Dockerfile.relay-server -t ewr.vultrcr.com/jxonline/relay-server:linux-8.0 --push
-docker build .\account-server\ -f .\account-server\Dockerifle.pay-server -t ewr.vultrcr.com/jxonline/pay-server:linux-8.0 --push
+docker build .\account-server\ -f .\account-server\Dockerfile.pay-server -t ewr.vultrcr.com/jxonline/pay-server:linux-8.0 --push
 
 ## Prepare server
 
@@ -16,5 +16,5 @@ docker compose up
 
 ## Run server
 docker compose up -d
-docker run -d -e DISPLAY=10.10.11.22:0.0 ewr.vultrcr.com/jxonline/relay-server
-docker run -d -e DISPLAY=10.10.11.22:0.0 ewr.vultrcr.com/jxonline/pay-server
+docker run -d --network=host -e DISPLAY=10.10.11.22:0.0 ewr.vultrcr.com/jxonline/relay-server:linux-8.0
+docker run -d --network=host -e DISPLAY=10.10.11.22:0.0 ewr.vultrcr.com/jxonline/pay-server:linux-8.0
