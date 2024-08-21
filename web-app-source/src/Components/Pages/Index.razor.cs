@@ -1,6 +1,7 @@
 ﻿
 using CephasPAD.JXOnlineWeb.Models;
 using CephasPAD.JXOnlineWeb.Services;
+using JXOnline.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
 
@@ -42,28 +43,10 @@ public partial class Index
             return;
         }
         this.isChecking = true;
-
         this.lastChecked = DateTime.Now;
-        var processes = Process.GetProcesses();
-        foreach (var gameServiceProcess in gameServiceProcesses)
-        {
-            try
-            {
-                var process = processes.FirstOrDefault(p => p.ProcessName == gameServiceProcess.Info.Name);
-                if (process == null)
-                {
-                    gameServiceProcess.MarkAsRunning();
-                    continue;
-                }
-                gameServiceProcess.MarkAsStopped();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "AutoCheckAsync failed");
-            }
-        await InvokeAsync(StateHasChanged);
-        
+        this.gameServiceProcesses = await serverManagerService.ListProcessesAsync();
         this.isChecking = false;
+        await InvokeAsync(StateHasChanged);
     }
 
     protected override void Dispose(bool disposing)
@@ -96,13 +79,26 @@ public partial class Index
 
     protected async Task StartAsync(GameServiceProcess gameServiceProcess)
     {
-        if (isWorking)
-        {
-            return;
-        }
         this.isWorking = true;
-        await Task.Delay(1000);
-        this.isWorking = false;
+        try
+        {
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = gameServiceProcess.Info.FileName,
+                Arguments = gameServiceProcess.Info.Arguments,
+                WorkingDirectory = gameServiceProcess.Info.WorkingDirectory,
+            };
+            Process.Start(processStartInfo);
+            await Task.Delay(1000);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "StartAsync failed");
+        }
+        finally
+        {
+            this.isWorking = false;
+        }
     }
 
     protected async Task StopAsync(GameServiceProcess gameServiceProcess)
