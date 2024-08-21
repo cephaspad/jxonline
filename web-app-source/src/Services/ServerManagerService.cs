@@ -7,7 +7,7 @@ namespace CephasPAD.JXOnlineWeb.Services;
 
 public class ServerManagerService : IServerManagerService
 {
-    public async Task<GameServiceProcess?> IsProcessRunningAsync(GameServiceProcessInfo gameServiceProcessInfo)
+    public async Task<Process?> FindProcessWithInfoAsync(GameServiceProcessInfo gameServiceProcessInfo)
     {
         var processes = Process.GetProcesses();
         var processName = Path.GetFileName(gameServiceProcessInfo.FileName);
@@ -37,9 +37,15 @@ public class ServerManagerService : IServerManagerService
                 continue;
             }
 
-            return await IsProcessRunningAsync(gameServiceProcessInfo);
+            return process;
         }
         return null;
+    }
+
+    public async Task<bool> IsProcessRunningAsync(GameServiceProcessInfo gameServiceProcessInfo)
+    {
+        var process = await FindProcessWithInfoAsync(gameServiceProcessInfo);
+        return process != null;
     }
 
     public async Task<IEnumerable<GameServiceProcess>> ListProcessesAsync()
@@ -50,7 +56,7 @@ public class ServerManagerService : IServerManagerService
         foreach (var gameServiceProcess in gameServiceProcesses)
         {
             var isProcessRunning = await IsProcessRunningAsync(gameServiceProcess.Info);
-            if (isProcessRunning != null)
+            if (isProcessRunning)
             {
                 gameServiceProcess.MarkAsRunning();
                 break;

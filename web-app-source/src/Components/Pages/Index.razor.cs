@@ -93,7 +93,7 @@ public partial class Index
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "StartAsync failed");
+            await Notify.Error(ex.Message, $"Start {gameServiceProcess.Info.Name} failed !!!");
         }
         finally
         {
