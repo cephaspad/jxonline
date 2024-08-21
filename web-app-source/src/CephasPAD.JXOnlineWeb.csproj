@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <UserSecretsId>33cc37b1-054b-4b64-843b-3b3d1778dc32</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -109,6 +110,10 @@
 
   <ItemGroup>
     <Content Remove="$(UserProfile)\.nuget\packages\*\*\contentFiles\any\*\*.abppkg*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Services\ServerManagerService.cs~RFb463766.TMP" />
   </ItemGroup>
 
 </Project>
