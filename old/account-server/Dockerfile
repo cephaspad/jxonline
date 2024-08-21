@@ -15,7 +15,7 @@ ENV GNUTLS_SYSTEM_PRIORITY_FILE=/config/priorityGNU
 ENV DISPLAY=$DISPLAY
 RUN winetricks mdac28
 
+VOLUME /app
 WORKDIR /app
-COPY apps/paysyswin/ .
 
-ENTRYPOINT ["/usr/bin/wine", "Sword3PaySys.exe"]
+ENTRYPOINT ["/usr/bin/wine"]

@@ -28,25 +28,23 @@ services:
       context: web-server
       dockerfile: Dockerfile
     volumes:
-      - server_data:/app
+      - server_data:/server
     network_mode: host
   
   pay-server:
     container_name: jxonline_pay_server
     build:
       context: .
-      dockerfile: pay-server/Dockerfile
-    volumes:
-      - server_data:/app
+      dockerfile: base/pay-server/Dockerfile
+    command: ["Sword3PaySys.exe"]
     network_mode: host
   
   relay-server:
     container_name: jxonline_relay_server
     build:
       context: .
-      dockerfile: relay_server/Dockerfile
-    volumes:
-      - server_data:/app
+      dockerfile: base/relay-server/Dockerfile
+    command: ["S3RelayServer.exe"]
     network_mode: host
 
 volumes:
