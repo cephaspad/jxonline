@@ -1,0 +1,9 @@
+﻿{
+  "applications": {
+    "JXOnline.WebApp": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44300",
+      "path": "../../JXOnline.WebApp/JXOnline.WebApp.csproj"
+    }
+  }
+}
