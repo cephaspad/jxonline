@@ -1,6 +1,4 @@
-﻿using JXOnline.WebApp.Models;
-
-namespace CephasPAD.JXOnlineWeb.Models
+﻿namespace CephasPAD.JXOnlineWeb.Models
 {
     public class GameServiceProcess(GameServiceProcessInfo gameServiceProcessInfo)
     {
