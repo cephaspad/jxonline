@@ -7,44 +7,57 @@ namespace CephasPAD.JXOnlineWeb.Services;
 
 public class ServerManagerService : IServerManagerService
 {
-    public async Task<IEnumerable<GameServiceProcess>> ListProcessesAsync()
+    public async Task<GameServiceProcess?> IsProcessRunningAsync(GameServiceProcessInfo gameServiceProcessInfo)
     {
         var processes = Process.GetProcesses();
+        var processName = Path.GetFileName(gameServiceProcessInfo.FileName);
+        var processesSameName = processes.Where(p => string.Compare(p.ProcessName, processName, true) == 0);
+        foreach (var process in processesSameName)
+        {
+            var workingDirectory = await GetWorkingDirectoryAsync(process.Id);
+            if (string.Compare(workingDirectory, gameServiceProcessInfo.WorkingDirectory) != 0)
+            {
+                continue;
+            }
+
+            var execute = await GetExecuteAsync(process.Id);
+            if (string.Compare(execute, gameServiceProcessInfo.FileName) != 0)
+            {
+                continue;
+            }
+
+            var cmdLine = await GetCommandLineAsync(process.Id);
+            if (cmdLine.Length <= execute.Length + 1)
+            {
+                continue;
+            }
+            var arguments = cmdLine.Substring(execute.Length + 1);
+            if (string.Compare(arguments, gameServiceProcessInfo.Arguments) != 0)
+            {
+                continue;
+            }
+
+            return await IsProcessRunningAsync(gameServiceProcessInfo);
+        }
+        return null;
+    }
+
+    public async Task<IEnumerable<GameServiceProcess>> ListProcessesAsync()
+    {
         var gameServiceProcesses = GameServiceProcessInfo.LoadAll()
             .Select(info => new GameServiceProcess(info))
             .ToArray();
         foreach (var gameServiceProcess in gameServiceProcesses)
         {
-            var processName = Path.GetFileName(gameServiceProcess.Info.FileName);
-            var processesSameName = processes.Where(p => string.Compare(p.ProcessName, processName, true) == 0);
-            foreach (var process in processesSameName)
+            var isProcessRunning = await IsProcessRunningAsync(gameServiceProcess.Info);
+            if (isProcessRunning != null)
             {
-                var workingDirectory = await GetWorkingDirectoryAsync(process.Id);
-                if (string.Compare(workingDirectory, gameServiceProcess.Info.WorkingDirectory) != 0)
-                {
-                    continue;
-                }
-
-                var execute = await GetExecuteAsync(process.Id);
-                if (string.Compare(execute, gameServiceProcess.Info.FileName) != 0)
-                {
-                    continue;
-                }
-
-                var cmdLine = await GetCommandLineAsync(process.Id);
-                if (cmdLine.Length <= execute.Length + 1)
-                {
-                    continue;
-                }
-                var arguments = cmdLine.Substring(execute.Length + 1);
-                if (string.Compare(arguments, gameServiceProcess.Info.Arguments) != 0)
-                {
-                    continue;
-                }
-
                 gameServiceProcess.MarkAsRunning();
                 break;
             }
+            gameServiceProcess.MarkAsStopped();
+            continue;
+
         }
 
         return gameServiceProcesses;
