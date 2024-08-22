@@ -1,27 +1,24 @@
 ﻿
 using CephasPAD.JXOnlineWeb.Models;
 using CephasPAD.JXOnlineWeb.Services;
-using JXOnline.WebApp.Models;
-using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
 
 namespace CephasPAD.JXOnlineWeb.Components.Pages;
 
 public partial class Index
 {
     private readonly Timer timer;
-    private readonly IServerManagerService serverManagerService;
-    private IEnumerable<GameServiceProcess> gameServiceProcesses;
+    private readonly IServerAppService serverAppService;
+    private IEnumerable<ServerAppProcess> serverAppProcesses;
     private bool isChecking;
     private bool isWorking;
     private DateTime lastChecked = DateTime.MinValue;
 
-    public Index(IServerManagerService serverManagerService)
+    public Index(IServerAppService serverAppService)
     {
         this.timer = new Timer(async _ => await AutoCheckAsync(), null, Timeout.Infinite, Timeout.Infinite);
-        this.gameServiceProcesses = [];
+        this.serverAppProcesses = [];
         this.isChecking = false;
-        this.serverManagerService = serverManagerService;
+        this.serverAppService = serverAppService;
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -44,7 +41,7 @@ public partial class Index
         }
         this.isChecking = true;
         this.lastChecked = DateTime.Now;
-        this.gameServiceProcesses = await serverManagerService.ListProcessesAsync();
+        this.serverAppProcesses = await serverAppService.ListProcessesAsync();
         this.isChecking = false;
         await InvokeAsync(StateHasChanged);
     }
@@ -77,23 +74,17 @@ public partial class Index
         this.isWorking = false;
     }
 
-    protected async Task StartAsync(GameServiceProcess gameServiceProcess)
+    protected async Task StartAsync(ServerAppProcess serverAppProcess)
     {
         this.isWorking = true;
         try
         {
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = gameServiceProcess.Info.FileName,
-                Arguments = gameServiceProcess.Info.Arguments,
-                WorkingDirectory = gameServiceProcess.Info.WorkingDirectory,
-            };
-            Process.Start(processStartInfo);
-            await Task.Delay(1000);
+            await serverAppService.StartAsync(serverAppProcess.Info);
+            await Notify.Success($"Start {serverAppProcess.Info.Name} success !!!");
         }
         catch (Exception ex)
         {
-            await Notify.Error(ex.Message, $"Start {gameServiceProcess.Info.Name} failed !!!");
+            await Notify.Error(ex.Message, $"Start {serverAppProcess.Info.Name} failed !!!");
         }
         finally
         {
@@ -101,14 +92,24 @@ public partial class Index
         }
     }
 
-    protected async Task StopAsync(GameServiceProcess gameServiceProcess)
+    protected async Task StopAsync(ServerAppProcess serverAppProcess)
     {
-        if (isWorking)
-        {
-            return;
-        }
         this.isWorking = true;
-        await Task.Delay(1000);
-        this.isWorking = false;
+        try
+        {
+            var serviceName = serverAppProcess.Info.Name;
+
+            await serverAppService.StopAsync(serverAppProcess.Info);
+            await serverAppService.UnregisterAsync(serviceName);
+            await Notify.Success($"Stop {serverAppProcess.Info.Name} success !!!");
+        }
+        catch (Exception ex)
+        {
+            await Notify.Error(ex.Message, $"Stop {serverAppProcess.Info.Name} failed !!!");
+        }
+        finally
+        {
+            this.isWorking = false;
+        }
     }
 }

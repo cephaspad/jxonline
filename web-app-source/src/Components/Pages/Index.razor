@@ -16,24 +16,24 @@
             </div>
         </div>
         <div class="card-body">
-                @foreach (var gameServiceProcess in gameServiceProcesses)
-                {
-                    <div class="row mb-2">
-                        <div class="col-9 text-start">
-                            @gameServiceProcess.Info.Name
-                        </div>
-                        <div class="col-3 text-end">
-                            @if (gameServiceProcess.IsRunning)
-                            {
-                                <Button Class="btn btn-danger" Disabled="@isWorking" Clicked="@(() => StopAsync(gameServiceProcess))">Stop</Button>
-                            }
-                            else
-                            {
-                                <Button Class="btn btn-primary" Disabled="@isWorking" Clicked="@(() => StartAsync(gameServiceProcess))">Start</Button>
-                            }
-                        </div>
+            @foreach (var serverAppProcess in serverAppProcesses)
+            {
+                <div class="row mb-2">
+                    <div class="col-9 text-start">
+                        @serverAppProcess.Info.Name
                     </div>
-                }
+                    <div class="col-3 text-end">
+                        @if (serverAppProcess.IsActive)
+                        {
+                            <Button Class="btn btn-danger" Disabled="@(isWorking && serverAppProcess.IsActivatingOrDeactivating)" Clicked="@(() => StopAsync(serverAppProcess))">Stop</Button>
+                        }
+                        else
+                        {
+                            <Button Class="btn btn-primary" Disabled="@(isWorking && serverAppProcess.IsActivatingOrDeactivating)" Clicked="@(() => StartAsync(serverAppProcess))">Start</Button>
+                        }
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
