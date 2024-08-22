@@ -1,0 +1,17 @@
+﻿@page "/user-management"
+@inherits JXOnlineWebComponentBase
+
+<Card>
+    <CardHeader>
+        <h5 class="card-title">
+            User Management
+        </h5>
+    </CardHeader>
+    <CardBody>
+        <Button class="btn btn-primary" OnClick="AddUser">Add User</Button>
+        @foreach (var user in collection)
+        {
+            
+        }
+    </CardBody>
+</Card>

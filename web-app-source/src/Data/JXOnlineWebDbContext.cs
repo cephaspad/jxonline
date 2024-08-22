@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace CephasPAD.JXOnlineWeb.Data;
 
+[ConnectionStringName("Default")]
 public class JXOnlineWebDbContext : AbpDbContext<JXOnlineWebDbContext>
 {
     public JXOnlineWebDbContext(DbContextOptions<JXOnlineWebDbContext> options)
