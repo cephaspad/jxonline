@@ -1,0 +1,16 @@
+﻿[Unit]
+Description=JX Online - Relay Server
+Wants=network-online.target syslog.target
+
+[Service]
+WorkingDirectory=/jx/paysyswin
+ExecStart=/usr/bin/wine /jx/paysyswin/Sword3PaySys.exe
+KillSignal=SIGINT
+SyslogIdentifier=jx-relay-server
+User=root
+Environment=WINEARCH=win32
+Environment=WINEPREFIX=/root/.wine32
+Environment=GNUTLS_SYSTEM_PRIORITY_FILE=/jx/paysyswin/priorityGNU
+
+[Install]
+WantedBy=multi-user.target

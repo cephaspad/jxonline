@@ -1,0 +1,13 @@
+﻿[Unit]
+Description=JX Online - Database Server
+Wants=network-online.target syslog.target
+
+[Service]
+WorkingDirectory=/jx/gateway
+ExecStart=/usr/bin/wine /jx/gateway/goddess_y
+KillSignal=SIGINT
+SyslogIdentifier=jx-goddess
+User=root
+
+[Install]
+WantedBy=multi-user.target

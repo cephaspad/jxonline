@@ -1,0 +1,13 @@
+﻿[Unit]
+Description=JX Online - Bishop
+Wants=network-online.target syslog.target
+
+[Service]
+WorkingDirectory=/jx/gateway
+ExecStart=/usr/bin/wine /jx/gateway/bishop_y
+KillSignal=SIGINT
+SyslogIdentifier=jx-bishop
+User=root
+
+[Install]
+WantedBy=multi-user.target

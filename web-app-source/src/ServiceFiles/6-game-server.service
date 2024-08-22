@@ -1,0 +1,13 @@
+﻿[Unit]
+Description=JX Online - Game Server
+Wants=network-online.target syslog.target
+
+[Service]
+WorkingDirectory=/jx/server1
+ExecStart=/usr/bin/wine /jx/gateway/jx_linux_y
+KillSignal=SIGINT
+SyslogIdentifier=jx-game-server
+User=root
+
+[Install]
+WantedBy=multi-user.target

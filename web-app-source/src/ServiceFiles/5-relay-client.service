@@ -1,0 +1,13 @@
+﻿[Unit]
+Description=JX Online - Relay Client
+Wants=network-online.target syslog.target
+
+[Service]
+WorkingDirectory=/jx/gateway/s3relay
+ExecStart=/usr/bin/wine /jx/gateway/s3relay/s3relay_y
+KillSignal=SIGINT
+SyslogIdentifier=jx-s3relay
+User=root
+
+[Install]
+WantedBy=multi-user.target
