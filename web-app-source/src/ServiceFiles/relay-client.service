@@ -1,6 +1,7 @@
 ﻿[Unit]
 Description=JX Online - Relay Client
 Wants=network-online.target syslog.target
+Requires=pay-server.service relay-server.service database-server.service
 
 [Service]
 WorkingDirectory=/jx/gateway/s3relay

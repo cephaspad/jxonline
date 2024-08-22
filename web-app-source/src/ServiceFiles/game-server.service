@@ -1,6 +1,7 @@
 ﻿[Unit]
 Description=JX Online - Game Server
 Wants=network-online.target syslog.target
+Requires=pay-server.service relay-server.service database-server.service pay-client.service relay-client.service
 
 [Service]
 WorkingDirectory=/jx/server1
