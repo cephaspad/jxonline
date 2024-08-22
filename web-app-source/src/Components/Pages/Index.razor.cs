@@ -59,7 +59,15 @@ public partial class Index
             return;
         }
         this.isWorking = true;
-        await Task.Delay(1000);
+        var serverAppProcesses = this.serverAppProcesses.Where(x => !x.IsActive).ToList();
+        foreach (var serverAppProcess in serverAppProcesses)
+        {
+            if (serverAppProcess.IsActive)
+            {
+                continue;
+            }
+            await StartAsync(serverAppProcess);
+        }
         this.isWorking = false;
     }
 
@@ -70,7 +78,15 @@ public partial class Index
             return;
         }
         this.isWorking = true;
-        await Task.Delay(1000);
+        var serverAppProcesses = this.serverAppProcesses.Where(x => x.IsActive).ToList();
+        foreach (var serverAppProcess in serverAppProcesses)
+        {
+            if (!serverAppProcess.IsActive)
+            {
+                continue;
+            }
+            await StopAsync(serverAppProcess);
+        }
         this.isWorking = false;
     }
 
