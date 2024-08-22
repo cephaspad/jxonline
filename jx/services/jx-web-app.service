@@ -4,7 +4,7 @@ Wants=network-online.target syslog.target
 
 [Service]
 WorkingDirectory=/jx/web-app
-ExecStart=/usr/bin/dotnet /jx/web-app/jx-web-app.dll
+ExecStart=/usr/bin/dotnet /jx/web-app/CephasPAD.JXOnlineWeb.dll
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10

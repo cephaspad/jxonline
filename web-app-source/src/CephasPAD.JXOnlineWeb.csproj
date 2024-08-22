@@ -114,10 +114,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Services\ServerManagerService.cs~RFb463766.TMP" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="ServiceFiles\*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
