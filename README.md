@@ -16,9 +16,9 @@ apt update && apt install -y nano
 
 ### Web management
 
-1. Install [.NET 8 Runtime](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-install?tabs=dotnet8&pivots=os-linux-ubuntu-2404#ubuntu-2404)
+1. Install [.NET 8 SDK](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-install?tabs=dotnet8&pivots=os-linux-ubuntu-2404#ubuntu-2404)
 ``` bash
-apt update && apt install -y dotnet-runtime-8.0
+apt update && apt install -y dotnet-sdk-8.0
 ```
 
 2. Upload `jx-web-app` source code to `/jx/web-app-source`
