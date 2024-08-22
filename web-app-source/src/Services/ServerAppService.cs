@@ -6,6 +6,34 @@ namespace CephasPAD.JXOnlineWeb.Services;
 
 public class ServerAppService : IServerAppService
 {
+    private static List<ServerAppInfo> PrioritySort(IEnumerable<ServerAppInfo> serverAppInfos)
+    {
+        IEnumerable<string> priorityList = ["pay-server.service", "relay-server.service", "database-server.service", "pay-client.service", "relay-client.service", "game-server.service"];
+
+        var sortedServerAppInfos = new List<ServerAppInfo>();
+
+        // Add the server app info in the order of the priority list
+        foreach (var priority in priorityList)
+        {
+            var serverAppInfo = serverAppInfos.FirstOrDefault(x => x.Name == priority);
+            if (serverAppInfo != null)
+            {
+                sortedServerAppInfos.Add(serverAppInfo);
+            }
+        }
+
+        // Add the rest
+        foreach (var serverAppInfo in serverAppInfos)
+        {
+            if (!priorityList.Contains(serverAppInfo.Name))
+            {
+                sortedServerAppInfos.Add(serverAppInfo);
+            }
+        }
+
+        return sortedServerAppInfos;
+    }
+
     public async Task<IEnumerable<ServerAppInfo>> ListAppsAsync()
     {
         var serviceDirectory = Path.GetFullPath("ServiceFiles");
@@ -18,6 +46,7 @@ public class ServerAppService : IServerAppService
             var serverAppInfo = new ServerAppInfo(serverAppFileName, serverAppFullPath);
             serverAppInfos.Add(serverAppInfo);
         }
+        serverAppInfos = PrioritySort(serverAppInfos);
         return await Task.FromResult(serverAppInfos);
     }
 
