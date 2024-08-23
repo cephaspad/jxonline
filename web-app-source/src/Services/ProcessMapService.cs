@@ -34,6 +34,11 @@ public class ProcessMapService : IProcessMapService
 
     private async Task LoadAsync()
     {
+        if (!File.Exists(storeFilePath))
+        {
+            return;
+        }
+
         var loadedProcessMapJson = await File.ReadAllTextAsync(storeFilePath);
         var loadedProcessMap = JsonSerializer.Deserialize<Dictionary<string, int?>>(loadedProcessMapJson);
 
