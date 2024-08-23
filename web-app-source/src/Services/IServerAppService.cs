@@ -9,5 +9,4 @@ public interface IServerAppService : ITransientDependency
     Task<IEnumerable<ServerAppProcess>> ListProcessesAsync();
     Task StartAsync(ServerAppInfo serverAppInfo);
     Task StopAsync(ServerAppInfo serverAppInfo);
-    Task UnregisterAsync(string serverName);
 }

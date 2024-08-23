@@ -23,13 +23,13 @@
                         @serverAppProcess.Info.Name
                     </div>
                     <div class="col-3 text-end">
-                        @if (serverAppProcess.IsActive)
+                        @if (serverAppProcess.IsRunning)
                         {
-                            <Button Class="btn btn-danger" Disabled="@(isWorking && serverAppProcess.IsActivatingOrDeactivating)" Clicked="@(() => StopAsync(serverAppProcess))">Stop</Button>
+                            <Button Class="btn btn-danger" Disabled="@(isWorking)" Clicked="@(() => StopAsync(serverAppProcess))">Stop</Button>
                         }
                         else
                         {
-                            <Button Class="btn btn-primary" Disabled="@(isWorking && serverAppProcess.IsActivatingOrDeactivating)" Clicked="@(() => StartAsync(serverAppProcess))">Start</Button>
+                            <Button Class="btn btn-primary" Disabled="@(isWorking)" Clicked="@(() => StartAsync(serverAppProcess))">Start</Button>
                         }
                     </div>
                 </div>

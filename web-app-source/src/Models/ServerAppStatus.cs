@@ -2,11 +2,7 @@
 
 public enum ServerAppStatus
 {
-    Unknown,
-    Active,
-    Inactive,
-    Activating,
-    Deactivating,
-    Failed,
-    NotRegistered,
+    Idle,
+    Running,
+    Stopped
 }

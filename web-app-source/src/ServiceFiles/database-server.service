@@ -5,7 +5,7 @@ Requires=pay-server.service relay-server.service
 
 [Service]
 WorkingDirectory=/jx/gateway
-ExecStart=/usr/bin/wine /jx/gateway/goddess_y
+ExecStart=/jx/gateway/goddess_y
 KillSignal=SIGINT
 SyslogIdentifier=jx-goddess
 User=root

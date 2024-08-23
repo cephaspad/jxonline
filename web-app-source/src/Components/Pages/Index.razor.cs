@@ -59,10 +59,10 @@ public partial class Index
             return;
         }
         this.isWorking = true;
-        var serverAppProcesses = this.serverAppProcesses.Where(x => !x.IsActive).ToList();
+        var serverAppProcesses = this.serverAppProcesses.Where(x => !x.IsRunning).ToList();
         foreach (var serverAppProcess in serverAppProcesses)
         {
-            if (serverAppProcess.IsActive)
+            if (serverAppProcess.IsRunning)
             {
                 continue;
             }
@@ -78,10 +78,10 @@ public partial class Index
             return;
         }
         this.isWorking = true;
-        var serverAppProcesses = this.serverAppProcesses.Where(x => x.IsActive).ToList();
+        var serverAppProcesses = this.serverAppProcesses.Where(x => x.IsRunning).ToList();
         foreach (var serverAppProcess in serverAppProcesses)
         {
-            if (!serverAppProcess.IsActive)
+            if (!serverAppProcess.IsRunning)
             {
                 continue;
             }
@@ -116,7 +116,6 @@ public partial class Index
             var serviceName = serverAppProcess.Info.Name;
 
             await serverAppService.StopAsync(serverAppProcess.Info);
-            await serverAppService.UnregisterAsync(serviceName);
             await Notify.Success($"Stop {serverAppProcess.Info.Name} success !!!");
         }
         catch (Exception ex)
