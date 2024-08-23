@@ -1,5 +1,6 @@
 ﻿using CephasPAD.JXOnlineWeb.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Specialized;
 using System.Diagnostics;
 
 namespace CephasPAD.JXOnlineWeb.Services;
@@ -31,14 +32,23 @@ public class ServerAppService(IProcessMapService processMapService) : IServerApp
 
     public IEnumerable<ServerAppInfo> ListAppInfos()
     {
+        Dictionary<string, string?> wineEnv = new()
+        {
+            ["WINEARCH"] = "win32",
+            ["WINEPREFIX"] = "/root/.win32",
+            ["DISPLAY"] = ":0",
+            ["GNUTLS_SYSTEM_PRIORITY_FILE"] = Path.GetFullPath("priorityGNU")
+        };
+
         return
         [
-            new("Sword3PaySys", "Sword3PaySys.exe", AccountServerRoot, true),
-            new("S3RelayServer", "S3RelayServer.exe", AccountServerRoot, true),
-            new("goddess_y", "goddess_y", GatewayRoot),
-            new("bishop_y", "bishop_y", GatewayRoot),
-            new("s3relay_y", "s3relay_y", S3RelayServerRoot),
-            new("jx_linux_y", "jx_linux_y", GameServerRoot),
+            new("virtual-display-server", "Xvfb", "/usr/bin"),
+            new("relay-server", "S3RelayServer.exe", AccountServerRoot, environment: wineEnv, isWine: true),
+            new("pay-server", "Sword3PaySys.exe", AccountServerRoot, environment:wineEnv, isWine: true),
+            new("database-server", "goddess_y", GatewayRoot),
+            new("pay-client", "bishop_y", GatewayRoot),
+            new("relay-client", "s3relay_y", S3RelayServerRoot),
+            new("game-server", "jx_linux_y", GameServerRoot),
         ];
     }
 
@@ -55,7 +65,6 @@ public class ServerAppService(IProcessMapService processMapService) : IServerApp
             }
 
             var serverAppProcess = new ServerAppProcess(serverAppInfo);
-
             if (processId == null)
             {
                 serverAppProcesses.Add(serverAppProcess);
@@ -87,17 +96,22 @@ public class ServerAppService(IProcessMapService processMapService) : IServerApp
 
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = serverAppInfo.Executable,
+            FileName = Path.Combine(serverAppInfo.WorkingDirectory, serverAppInfo.Executable),
             WorkingDirectory = serverAppInfo.WorkingDirectory,
             RedirectStandardOutput = true,
             UseShellExecute = false,
-            CreateNoWindow = true
+            CreateNoWindow = true,
         };
+        processStartInfo.Environment.Clear();
+        foreach (var (key, value) in serverAppInfo.Environment)
+        {
+            processStartInfo.Environment[key] = value;
+        }
 
         if (serverAppInfo.IsWine)
         {
             processStartInfo.FileName = "/usr/bin/wine";
-            processStartInfo.Arguments = serverAppInfo.Executable;
+            processStartInfo.Arguments = Path.Combine(serverAppInfo.WorkingDirectory, serverAppInfo.Executable);
         }
 
         process = Process.Start(processStartInfo)

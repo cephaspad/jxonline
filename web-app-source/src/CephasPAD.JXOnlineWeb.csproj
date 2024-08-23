@@ -119,4 +119,10 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="priorityGNU">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
