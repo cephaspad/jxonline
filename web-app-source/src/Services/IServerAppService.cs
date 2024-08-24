@@ -4,7 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace CephasPAD.JXOnlineWeb.Services;
 
-public interface IServerAppService : ITransientDependency
+public interface IServerAppService : IApplicationService
 {
     Task<IEnumerable<ServerAppProcess>> ListProcessesAsync();
     Task StartAsync(ServerAppInfo serverAppInfo);
