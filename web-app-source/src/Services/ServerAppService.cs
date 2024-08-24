@@ -20,12 +20,15 @@ public class ServerAppService(IProcessMapService processMapService) : IServerApp
             var processMap = await processMapService.GetAsync();
             if (processMap.TryGetValue(serverAppInfo.Name, out int? processId) && processId != null)
             {
-                return Process.GetProcessById(processId.Value);
+                var process = Process.GetProcessById(processId.Value);
+                if (process.ProcessName == serverAppInfo.Executable)
+                {
+                    return process;
+                }
             }
         }
         catch
         {
-            
         }
         return null;
     }
@@ -116,7 +119,15 @@ public class ServerAppService(IProcessMapService processMapService) : IServerApp
 
         process = Process.Start(processStartInfo)
             ?? throw new Exception("Failed to start process");
-        
+
+        process.OutputDataReceived += (sender, e) =>
+        {
+            if (e.Data != null)
+            {
+                Console.WriteLine(e.Data);
+            }
+        };
+
         await processMapService.SetValueAsync(serverAppInfo.Name, process.Id);
     }
 

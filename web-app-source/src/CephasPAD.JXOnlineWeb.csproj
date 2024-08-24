@@ -120,6 +120,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="jx-web-app.service">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="priorityGNU">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

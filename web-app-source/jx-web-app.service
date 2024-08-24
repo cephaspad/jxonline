@@ -1,0 +1,19 @@
+[Unit]
+Description=JX Online Web Management
+Wants=network-online.target syslog.target
+
+[Service]
+WorkingDirectory=/jx/web-app
+ExecStart=/usr/bin/dotnet /jx/web-app/CephasPAD.JXOnlineWeb.dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=jx-web-app
+User=root
+Environment="ASPNETCORE_ENVIRONMENT=Production"
+Environment="DOTNET_PRINT_TELEMETRY_MESSAGE=false"
+Environment="ASPNETCORE_URLS=http://+:80"
+
+[Install]
+WantedBy=multi-user.target
