@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace CephasPAD.JXOnlineWeb.Services;
 
-public class ServerAppService(IProcessMapService processMapService) : IServerAppService
+public class ServerAppService(IProcessMapService processMapService, ILogger logger) : IServerAppService
 {
     private static string ServerRoot => "/jx";
     private static string AccountServerRoot => Path.Combine(ServerRoot, "paysyswin");
@@ -124,7 +124,7 @@ public class ServerAppService(IProcessMapService processMapService) : IServerApp
         {
             if (e.Data != null)
             {
-                Console.WriteLine(e.Data);
+                logger.LogInformation(message: e.Data);
             }
         };
 
