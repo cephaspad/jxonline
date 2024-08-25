@@ -124,7 +124,7 @@ public class ServerAppService(IProcessMapService processMapService) : JXOnlineWe
         {
             if (e.Data != null)
             {
-                logger.LogInformation(message: e.Data);
+                Logger.LogInformation(message: e.Data);
             }
         };
 
